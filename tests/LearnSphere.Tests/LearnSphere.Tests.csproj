@@ -18,4 +18,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LearnSphere.Core\LearnSphere.Core.csproj" />
+    <ProjectReference Include="..\..\src\LearnSphere.Services\LearnSphere.Services.csproj" />
+  </ItemGroup>
+
 </Project>
