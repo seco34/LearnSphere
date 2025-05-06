@@ -1,0 +1,38 @@
+@page
+@model LearnSphere.Web.Pages.Courses.IndexModel
+
+<h1>Kurs Listesi</h1>
+
+@if (Model.Courses == null)
+{
+    <p>Yükleniyor…</p>
+}
+else if (!Model.Courses.Any())
+{
+    <p>Henüz eklenmiş kurs yok.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Başlık</th><th>Açıklama</th></tr>
+        </thead>
+        <tbody>
+        @foreach (var c in Model.Courses)
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>@c.Title</td>
+                <td>@c.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+<hr />
+<h2>Yeni Kurs Ekle</h2>
+<form method="post">
+    <input name="title" placeholder="Başlık" required />
+    <input name="description" placeholder="Açıklama" required />
+    <button type="submit">Ekle</button>
+</form>
