@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": ".NET API (LearnSphere.API)",
+        "type": "coreclr",
+        "request": "launch",
+        "program": "${workspaceFolder}/src/LearnSphere.API/bin/Debug/net9.0/LearnSphere.API.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/LearnSphere.API",
+        "console": "integratedTerminal",
+        "preLaunchTask": "build API",
+  
+        // Bu satırlarla "Now listening on: https://..." çıktısını
+        // yakalayıp tarayıcıda aç:
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        }
+      },
+      {
+        "name": ".NET Razor UI (LearnSphere.Web)",
+        "type": "coreclr",
+        "request": "launch",
+        "program": "${workspaceFolder}/src/LearnSphere.Web/bin/Debug/net9.0/LearnSphere.Web.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/LearnSphere.Web",
+        "console": "integratedTerminal",
+        "preLaunchTask": "build Web",
+  
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        }
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Launch API + UI",
+        "configurations": [
+          ".NET API (LearnSphere.API)",
+          ".NET Razor UI (LearnSphere.Web)"
+        ]
+      }
+    ]
+  }
+  

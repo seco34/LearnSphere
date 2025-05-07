@@ -35,6 +35,18 @@ namespace LearnSphere.Web.Pages.Courses
     await OnGetAsync();            // Yine de listeyi getir
     return Page();
 }
+public async Task<IActionResult> OnPostDeleteAsync(int id)
+{
+    // 1) API'ye DELETE isteği gönder
+    var client   = _factory.CreateClient("ApiClient");
+    var response = await client.DeleteAsync($"/api/course/{id}");
+
+    // 2) Listeyi tekrar çek
+    await OnGetAsync();
+
+    // 3) Aynı sayfayı yeniden göster
+    return Page();
+}
 
     }
 }

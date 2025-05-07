@@ -1,57 +1,40 @@
+using LearnSphere.Data.Context;
 using LearnSphere.Core.Services;
 using LearnSphere.Services.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Add services to the container:
-builder.Services.AddControllers();                                    // <-- Controller desteği
-builder.Services.AddOpenApi();                                        // <-- Swagger/OpenAPI
-builder.Services.AddScoped<IHelloService, HelloService>();            // <-- DI kaydı
+// 1. Servisleri kayıt et
+builder.Services.AddControllers();                        
+builder.Services.AddEndpointsApiExplorer();              
+builder.Services.AddSwaggerGen();                        
+
+builder.Services.AddDbContext<LearningDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddScoped<IHelloService, HelloService>();
+// eğer CourseService vb. varsa onları da buraya ekleyin:
+// builder.Services.AddScoped<ICourseService, CourseService>();
 
 var app = builder.Build();
 
-// 2. Configure the HTTP request pipeline:
+// 2. Orta katman (middleware) yapılandırması
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();                                                 // <-- Swagger UI
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
-// 3. Map controllers:
+// 3. Controller rotalarını eşle
 app.MapControllers();
 
-// 4. (Opsiyonel) Mevcut WeatherForecast minimal API endpoint:
-app.MapGet("/weatherforecast", () =>
-{
-    var summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-        "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
 app.Run();
-
-// 5. Record tipi (minimal API için):
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

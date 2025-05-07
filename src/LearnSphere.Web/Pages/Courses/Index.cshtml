@@ -15,7 +15,12 @@ else
 {
     <table>
         <thead>
-            <tr><th>ID</th><th>Başlık</th><th>Açıklama</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Başlık</th>
+                <th>Açıklama</th>
+                <th>İşlemler</th>
+            </tr>
         </thead>
         <tbody>
         @foreach (var c in Model.Courses)
@@ -24,12 +29,23 @@ else
                 <td>@c.Id</td>
                 <td>@c.Title</td>
                 <td>@c.Description</td>
+                <td>
+                    <!-- Silme formu -->
+                    <form method="post"
+                          asp-page-handler="Delete"
+                          style="display:inline">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button type="submit">Sil</button>
+                    </form>
+                </td>
             </tr>
         }
         </tbody>
     </table>
 }
+
 <hr />
+
 <h2>Yeni Kurs Ekle</h2>
 <form method="post">
     <input name="title" placeholder="Başlık" required />
