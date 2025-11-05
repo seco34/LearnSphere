@@ -1,0 +1,31 @@
+name: Codex AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install openai @octokit/auth-app node-fetch@3
+
+      - name: Run Codex Bot
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node .github/codex-review.js
